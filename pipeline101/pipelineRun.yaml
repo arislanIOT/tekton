@@ -1,0 +1,30 @@
+apiVersion: tekton.dev/v1beta1
+kind: PipelineRun 
+metadata: 
+  generateName: pipeline1-run
+  labels:
+    teir: sample
+    data: pipeline1
+spec:
+  pipelineRef:
+    name: ark-pipes
+  
+  params:
+    - name: gitUrl
+      value: https://github.com/arislanIOT/get-started-node.git
+    - name: build_image
+      value: registry.access.redhat.com/ubi8/ubi:latest
+    - name: imageUrl
+      value: docker.io/nody/nodes
+    - name: imageTag
+      value: latest:v1
+
+  workspaces:
+    - name:  sourcecode-storage
+      volumeClaimTemplate:
+        spec:
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: 1G

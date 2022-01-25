@@ -1,0 +1,36 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task 
+metadata:
+  name: buildah
+  labels:
+    teir: sample
+    data: pipeline1
+  
+spec:
+  workspaces:
+    - name: source
+  results:
+    - name: IMAGE_DIGEST
+      description: Digest of the image just built. 
+
+  params:
+    - name: BUILDER_IMAGE
+      description: Builder Image 
+    - name: DOCKERFILE 
+      description: Path to Dockerfile
+      default: ./Dockerfile
+    - name: CONTEXT
+      description: Path to the directory to use as context  
+      default: .
+    - name: IMAGE
+      description: Reference of the image buildah will produce.
+
+  steps:
+    - name: building
+      image: $(params.BUILDER_IMAGE)
+      workingDir: $(workspaces.source.path)
+      script: |
+        pwd
+        yum update -y
+        yum install buildah -y 
+        buildah bud -f $(params.DOCKERFILE) -t $(params.IMAGE) $(params.CONTEXT)

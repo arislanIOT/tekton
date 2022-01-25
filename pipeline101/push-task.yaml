@@ -1,0 +1,31 @@
+apiVersion: tekton.dev/v1beta1
+kind: Task 
+metadata:
+  name: pushing
+  labels:
+    teir: sample
+    data: pipeline1
+  
+spec:
+  workspaces:
+    - name: source
+  results:
+    - name: IMAGE_DIGEST
+      description: Digest of the image just built. 
+
+  params:
+    - name: BUILDER_IMAGE
+      description: Builder Image 
+    - name: DOCKERFILE 
+      description: Path to Dockerfile
+      default: ./Dockerfile
+    - name: CONTEXT
+      description: Path to the directory to use as context  
+      default: .
+
+  steps:
+    - name: building
+      image: $(params.BUILDER_IMAGE)
+      workingDir: $(workspaces.source.path)
+      script: |
+        buildah bud -f $(params.DOCKERFILE) -t nodejs:latest
