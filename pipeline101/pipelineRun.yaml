@@ -17,7 +17,7 @@ spec:
     - name: imageUrl
       value: docker.io/nody/nodes
     - name: imageTag
-      value: latest:v1
+      value: latest
     - name: storage_driver
       value: vfs
 
