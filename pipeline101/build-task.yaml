@@ -24,6 +24,9 @@ spec:
       default: .
     - name: IMAGE
       description: Reference of the image buildah will produce.
+    - name: STORAGE_DRIVER
+      description: buildah storage driver 
+      default: overlay
 
   steps:
     - name: building
@@ -33,4 +36,15 @@ spec:
         pwd
         yum update -y
         yum install buildah -y 
-        buildah --storage-driver=vfs bud -f $(params.DOCKERFILE) -t $(params.IMAGE) $(params.CONTEXT)
+        buildah $(params.STORAGE_DRIVER) bud -f $(params.DOCKERFILE) -t $(params.IMAGE) $(params.CONTEXT)
+
+      volumeMounts:
+        - name: varlibcontainers
+          mountPath: /var/lib/containers
+
+      securityContext:
+          privileged: true
+
+  volumes:
+    - name: varlibcontainers
+      emptyDir: {}

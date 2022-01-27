@@ -23,6 +23,8 @@ spec:
     - name: build_image 
       description: image used for building 
       default: "registry.access.redhat.com/ubi8/ubi:latest"
+    - name: storage_driver 
+      description: stprage driver used by buildah
     
   
   tasks: 
@@ -49,6 +51,8 @@ spec:
           value: $(params.pathtoContext)
         - name: IMAGE
           value: $(params.imageUrl):$(params.imageTag)
+        - name: STORAGE_DRIVER
+          value: $(params.storage_driver)
       runAfter: 
         - repo-clone
       workspaces:

@@ -13,11 +13,13 @@ spec:
     - name: gitUrl
       value: https://github.com/arislanIOT/get-started-node.git
     - name: build_image
-      value: registry.access.redhat.com/ubi8/ubi:latest
+      value: quay.io/buildah/stable
     - name: imageUrl
       value: docker.io/nody/nodes
     - name: imageTag
       value: latest:v1
+    - name: storage_driver
+      value: vfs
 
   workspaces:
     - name:  sourcecode-storage
