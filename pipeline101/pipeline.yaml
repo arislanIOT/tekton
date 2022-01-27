@@ -19,7 +19,7 @@ spec:
       default: "latest"
     - name: pathtoContext
       description: Path to build context. 
-      default: src
+      default: ./
     - name: build_image 
       description: image used for building 
       default: "registry.access.redhat.com/ubi8/ubi:latest"
