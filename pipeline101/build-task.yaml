@@ -33,4 +33,4 @@ spec:
         pwd
         yum update -y
         yum install buildah -y 
-        buildah bud -f $(params.DOCKERFILE) -t $(params.IMAGE) $(params.CONTEXT)
+        buildah --storage-driver=vfs bud -f $(params.DOCKERFILE) -t $(params.IMAGE) $(params.CONTEXT)
