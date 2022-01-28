@@ -61,3 +61,18 @@ spec:
 
      
 
+    - name: push 
+      taskRef:
+        name: pushing
+      params:
+        - name: BUILDER_IMAGE
+          value: $(params.build_image)
+        - name: IMAGE
+          value: $(params.imageUrl):$(params.imageTag)
+        - name: STORAGE_DRIVER
+          value: $(params.storage_driver)
+      runAfter:
+        - build
+      workspaces:
+        - name: buks
+          workspace: sourcecode-storage

@@ -15,7 +15,7 @@ spec:
     - name: build_image
       value: quay.io/buildah/stable
     - name: imageUrl
-      value: docker.io/nody/nodes
+      value: us.icr.io/initial_namespace/nodes
     - name: imageTag
       value: latest
     - name: storage_driver
