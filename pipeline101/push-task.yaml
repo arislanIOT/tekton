@@ -1,14 +1,14 @@
 apiVersion: tekton.dev/v1beta1
 kind: Task 
 metadata:
-  name: pushing
+  name: push
   labels:
     teir: sample
     data: pipeline1
   
 spec:
   workspaces:
-    - name: buks
+    - name: source
   results:
     - name: IMAGE_DIGEST
       description: Digest of the image just built. 
@@ -16,23 +16,19 @@ spec:
   params:
     - name: BUILDER_IMAGE
       description: Builder Image 
-    - name: DOCKERFILE 
-      description: Path to Dockerfile
-      default: ./Dockerfile
-    - name: CONTEXT
-      description: Path to the directory to use as context  
-      default: .
+    - name: IMAGE
+      description: Reference of the image buildah will produce.
+    - name: STORAGE_DRIVER
+      description: buildah storage driver 
+      default: overlay
 
   steps:
-    - name: building
+    - name: pushing
       image: $(params.BUILDER_IMAGE)
       workingDir: $(workspaces.source.path)
       script: |
-        # buildah  --storage-driver=$(params.STORAGE_DRIVER) push --digestfile $(workspaces.sourcecode.path)/image-digest $(params.IMAGE) \
-        # $(params.IMAGE) && \
-
-        buildah inspect $(params.IMAGE)
-        buildah  --storage-driver=$(params.STORAGE_DRIVER) push $(params.IMAGE)
+        echo "push from new task"
+        buildah  --storage-driver=$(params.STORAGE_DRIVER) push --digestfile $(workspaces.source.path)/image-digest  $(params.IMAGE) docker://$(params.IMAGE)
 
       volumeMounts:
         - name: varlibcontainers
