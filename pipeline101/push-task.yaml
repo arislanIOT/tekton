@@ -27,8 +27,8 @@ spec:
       image: $(params.BUILDER_IMAGE)
       workingDir: $(workspaces.source.path)
       script: |
-        echo "push from new task"
-        buildah  --storage-driver=$(params.STORAGE_DRIVER) push --digestfile $(workspaces.source.path)/image-digest  $(params.IMAGE) docker://$(params.IMAGE)
+        echo  "Pushing started as Task"
+        buildah --storage-driver=$(params.STORAGE_DRIVER) push --digestfile $(workspaces.source.path)/image-digest  $(params.IMAGE) docker://$(params.IMAGE)
 
       volumeMounts:
         - name: varlibcontainers

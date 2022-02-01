@@ -59,20 +59,18 @@ spec:
         - name: source
           workspace: sourcecode-storage
 
-     
-
-    # - name: push 
-    #   taskRef:
-    #     name: push
-    #   params:
-    #     - name: BUILDER_IMAGE
-    #       value: $(params.build_image)
-    #     - name: IMAGE
-    #       value: $(params.imageUrl):$(params.imageTag)
-    #     - name: STORAGE_DRIVER
-    #       value: $(params.storage_driver)
-    #   runAfter:
-    #     - build
-    #   workspaces:
-    #     - name: source
-    #       workspace: sourcecode-storage
+    - name: push 
+      taskRef:
+        name: push
+      params:
+        - name: BUILDER_IMAGE
+          value: $(params.build_image)
+        - name: IMAGE
+          value: $(params.imageUrl):$(params.imageTag)
+        - name: STORAGE_DRIVER
+          value: $(params.storage_driver)
+      runAfter:
+        - build
+      workspaces:
+        - name: source
+          workspace: sourcecode-storage

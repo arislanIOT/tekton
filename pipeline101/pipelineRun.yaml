@@ -6,13 +6,15 @@ metadata:
     teir: sample
     data: pipeline1
 spec:
-  serviceAccountName: build-bot
+  serviceAccountNames: 
+    - taskName: push
+      serviceAccountName: build-bot
   pipelineRef:
     name: ark-pipes
   
   params:
     - name: gitUrl
-      value: https://github.com/arislanIOT/get-started-node.git
+      value: https://github.com/arislanIOT/Dockerizing-a-NodeJS-web-app.git
     - name: build_image
       value: quay.io/buildah/stable:latest
     - name: imageUrl
