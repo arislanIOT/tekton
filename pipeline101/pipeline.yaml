@@ -61,7 +61,7 @@ spec:
 
     - name: push 
       taskRef:
-        name: push
+        name: image-push
       params:
         - name: BUILDER_IMAGE
           value: $(params.build_image)
@@ -72,5 +72,5 @@ spec:
       runAfter:
         - build
       workspaces:
-        - name: source
+        - name: buk
           workspace: sourcecode-storage

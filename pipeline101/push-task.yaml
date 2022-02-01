@@ -1,14 +1,14 @@
 apiVersion: tekton.dev/v1beta1
-kind: Task 
+kind: Task
 metadata:
-  name: push
+  name: image-push
   labels:
     teir: sample
     data: pipeline1
   
 spec:
   workspaces:
-    - name: source
+    - name: buk
   results:
     - name: IMAGE_DIGEST
       description: Digest of the image just built. 
@@ -25,10 +25,9 @@ spec:
   steps:
     - name: pushing
       image: $(params.BUILDER_IMAGE)
-      workingDir: $(workspaces.source.path)
+      workingDir: $(workspaces.buk.path)
       script: |
-        echo  "Pushing started as Task"
-        buildah --storage-driver=$(params.STORAGE_DRIVER) push --digestfile $(workspaces.source.path)/image-digest  $(params.IMAGE) docker://$(params.IMAGE)
+        buildah --storage-driver=$(params.STORAGE_DRIVER) push --digestfile $(workspaces.buk.path)/image-digest  $(params.IMAGE) docker://$(params.IMAGE)
 
       volumeMounts:
         - name: varlibcontainers

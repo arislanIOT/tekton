@@ -14,7 +14,7 @@ spec:
   
   params:
     - name: gitUrl
-      value: https://github.com/arislanIOT/Dockerizing-a-NodeJS-web-app.git
+      value: https://github.com/arislanIOT/think-tekton-authoring.git
     - name: build_image
       value: quay.io/buildah/stable:latest
     - name: imageUrl
@@ -32,4 +32,4 @@ spec:
             - ReadWriteOnce
           resources:
             requests:
-              storage: 1G
+              storage: 10Gi
