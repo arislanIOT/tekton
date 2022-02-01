@@ -1,0 +1,46 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+metadata:
+  name: trigger-template
+spec:
+  params:
+  - name: header
+    description: The event header
+  - name: body
+    description: The event body
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1beta1
+    kind: PipelineRun
+    metadata: 
+      generateName: pipeline1-run
+      labels:
+        teir: sample
+        data: pipeline1
+    spec:
+      serviceAccountNames: 
+        - taskName: build
+          serviceAccountName: build-bot
+      pipelineRef:
+        name: ark-pipes
+      
+      params:
+        - name: gitUrl
+          value: https://github.com/arislanIOT/think-tekton-authoring.git
+        - name: build_image
+          value: quay.io/buildah/stable:latest
+        - name: imageUrl
+          value: us.icr.io/initial_namespace/nodes
+        - name: imageTag
+          value: s390x-latest
+        - name: storage_driver
+          value: vfs
+      
+      workspaces:
+        - name:  sourcecode-storage
+          volumeClaimTemplate:
+            spec:
+              accessModes:
+                - ReadWriteMany
+              resources:
+                requests:
+                  storage: 10Gi

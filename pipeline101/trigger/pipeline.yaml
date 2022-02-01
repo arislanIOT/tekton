@@ -1,0 +1,76 @@
+apiVersion: tekton.dev/v1beta1
+kind: Pipeline
+metadata:
+  name: ark-pipes
+  labels:
+    teir: sample
+    data: pipeline1
+spec:
+  workspaces:
+    - name: sourcecode-storage
+
+  params:
+    - name: gitUrl
+      description: Git repository URL 
+    - name: imageUrl
+      description: reference image 
+    - name: imageTag
+      description: Image tag usd while building image 
+      default: "latest"
+    - name: pathtoContext
+      description: Path to build context. 
+      default: ./
+    - name: build_image 
+      description: image used for building 
+      default: "registry.access.redhat.com/ubi8/ubi:latest"
+    - name: storage_driver 
+      description: stprage driver used by buildah
+    
+  
+  tasks: 
+    
+    - name: repo-clone
+      taskRef:
+        name: git-clone
+      params:
+        - name: url 
+          value: "$(params.gitUrl)"
+        - name: deleteExisting
+          value: "true"
+      workspaces:            
+        - name: output
+          workspace: sourcecode-storage
+    
+    - name: build 
+      taskRef: 
+        name: buildah
+      params:
+        - name: BUILDER_IMAGE
+          value: $(params.build_image)
+        - name: CONTEXT
+          value: $(params.pathtoContext)
+        - name: IMAGE
+          value: $(params.imageUrl):$(params.imageTag)
+        - name: STORAGE_DRIVER
+          value: $(params.storage_driver)
+      runAfter: 
+        - repo-clone
+      workspaces:
+        - name: source
+          workspace: sourcecode-storage
+
+    # - name: push 
+    #   taskRef:
+    #     name: image-push
+    #   params:
+    #     - name: BUILDER_IMAGE
+    #       value: $(params.build_image)
+    #     - name: IMAGE
+    #       value: $(params.imageUrl):$(params.imageTag)
+    #     - name: STORAGE_DRIVER
+    #       value: $(params.storage_driver)
+    #   runAfter:
+    #     - build
+    #   workspaces:
+    #     - name: buk
+    #       workspace: sourcecode-storage
