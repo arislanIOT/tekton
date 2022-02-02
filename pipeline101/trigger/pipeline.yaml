@@ -53,10 +53,6 @@ spec:
           value: $(params.imageUrl):$(params.imageTag)
         - name: STORAGE_DRIVER
           value: $(params.storage_driver)
-      resources:
-        outputs:
-          - name: image
-            resource: buildah-image
       runAfter: 
         - repo-clone
       workspaces:
@@ -73,10 +69,6 @@ spec:
           value: $(params.imageUrl):$(params.imageTag)
         - name: STORAGE_DRIVER
           value: $(params.storage_driver)
-      resources:
-        inputs:
-          - name: image
-            resource: buildah-image
       runAfter:
         - build
       workspaces:
