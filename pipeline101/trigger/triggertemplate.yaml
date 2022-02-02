@@ -48,7 +48,7 @@ spec:
         data: pipeline1
     spec:
       serviceAccountNames: 
-        - taskName: build
+        - taskName: push
           serviceAccountName: build-bot
       pipelineRef:
         name: ark-pipes
