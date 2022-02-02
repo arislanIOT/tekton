@@ -61,7 +61,7 @@ spec:
         - name: imageUrl
           value: us.icr.io/initial_namespace/nodes
         - name: imageTag
-          value: s390x-latest
+          value: latest
         - name: storage_driver
           value: vfs
       
