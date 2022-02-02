@@ -9,6 +9,36 @@ spec:
   - name: body
     description: The event body
   resourcetemplates:
+
+  - apiVersion: v1 
+    kind: Secret
+    metadata:
+      name: icr-ark 
+      annotations:
+        tekton.dev/docker-0: https://us.icr.io
+    type: kubernetes.io/dockerconfigjson
+    data:
+      .dockerconfigjson: eyJhdXRocyI6eyJ1cy5pY3IuaW8vaW5pdGlhbF9uYW1lc3BhY2UiOnsidXNlcm5hbWUiOiJpYW1hcGlrZXkiLCJwYXNzd29yZCI6ImhncmtGaTZVbHNOS01WRFRJRlRMOWdPTkdIeTNtVGFsenFPWVhBRnVDbXJPIiwiZW1haWwiOiJhcmlzbGFuQGlibS5jb20iLCJhdXRoIjoiYVdGdFlYQnBhMlY1T21obmNtdEdhVFpWYkhOT1MwMVdSRlJKUmxSTU9XZFBUa2RJZVROdFZHRnNlbkZQV1ZoQlJuVkRiWEpQIn19fQ==
+
+  - apiVersion: v1 
+    kind: ServiceAccount
+    metadata:
+      name: build-bot
+    secrets:
+      - name: icr-ark  
+  
+  - apiVersion: v1 
+    kind: PersistentVolumeClaim
+    metadata:
+      name: agentbuild-$(uid)-pvc
+    spec:
+      resources:
+        requests:
+          storage: 10Gi
+      volumeMode: Filesystem
+      accessModes:
+        - ReadWriteOnce
+        
   - apiVersion: tekton.dev/v1beta1
     kind: PipelineRun
     metadata: 
@@ -37,10 +67,5 @@ spec:
       
       workspaces:
         - name:  sourcecode-storage
-          volumeClaimTemplate:
-            spec:
-              accessModes:
-                - ReadWriteMany
-              resources:
-                requests:
-                  storage: 10Gi
+          persistentVolumeClaim:
+            claimName: agentbuild-$(uid)-pvc
